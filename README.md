@@ -1,38 +1,34 @@
-# 2048
-A small clone of [1024](https://play.google.com/store/apps/details?id=com.veewo.a1024), based on [Saming's 2048](http://saming.fr/p/2048/) (also a clone). 2048 was indirectly inspired by [Threes](https://asherv.com/threes/).
+# 512
+A clone of [128](https://ashervollmer.github.io/2048/128.html) by Asher Vollmer, which is itself a variant of the famous 2048 game.
 
-Made just for fun. [Play it here!](http://gabrielecirulli.github.io/2048/)
+This has a few notable improvements over 2048:
+- A smaller grid results in shorter games
+- The new tiles are always 2, resulting in more predictable strategic gameplay
 
-The official app can also be found on the [Play Store](https://play.google.com/store/apps/details?id=com.gabrielecirulli.app2048) and [App Store!](https://itunes.apple.com/us/app/2048-by-gabriele-cirulli/id868076805)
+These two changes make it feasible to max out the board, filling it with one tile each from 512 down to 2. This is quite challenging to do, but possible with a little luck and persistence.
 
-### Contributions
+I've added hints at the bottom which use a pre-calculated database of perfect play. The cool things about this are:
+- It turns out that perfect play allows a 100% win rate, leaving nothing up to chance (!)
+- Using rust + webassembly, we can use a single code base to read and write the perfect
+  play database
 
-[Anna Harren](https://github.com/iirelu/) and [sigod](https://github.com/sigod) are maintainers for this repository.
+Getting the database down to 10MB was a fun challenge! We can reduce the 56 million reachable boards down to 7 million positions after removing reduntant rotations and reflections. Then, because we know all possible input positions, we can use the [BBHash](https://github.com/rizkg/BBHash) algorithm to get a datastructure that maps each board to a unique index with only ~3 bits per board, then store the perfect-play win rate for each position in a plain array of 8-bit numbers.
 
-Other notable contributors:
+## Setup
+To get the build dependencies, first [install rust](https://www.rust-lang.org/tools/install), then run `cargo install wasm-pack`.
 
- - [TimPetricola](https://github.com/TimPetricola) added best score storage
- - [chrisprice](https://github.com/chrisprice) added custom code for swipe handling on mobile
- - [marcingajda](https://github.com/marcingajda) made swipes work on Windows Phone
- - [mgarciaisaia](https://github.com/mgarciaisaia) added support for Android 2.3
 
-Many thanks to [rayhaanj](https://github.com/rayhaanj), [Mechazawa](https://github.com/Mechazawa), [grant](https://github.com/grant), [remram44](https://github.com/remram44) and [ghoullier](https://github.com/ghoullier) for the many other good contributions.
+To build the perfect play database:
+```shell
+cargo run --release strategy.bin
+```
 
-### Screenshot
+To build the webassembly package:
+```shell
+wasm-pack build --target no-modules --out-dir js/strategy
+```
 
-<p align="center">
-  <img src="https://cloud.githubusercontent.com/assets/1175750/8614312/280e5dc2-26f1-11e5-9f1f-5891c3ca8b26.png" alt="Screenshot"/>
-</p>
-
-That screenshot is fake, by the way. I never reached 2048 :smile:
-
-## Contributing
-Changes and improvements are more than welcome! Feel free to fork and open a pull request. Please make your changes in a specific branch and request to pull into `master`! If you can, please make sure the game fully works before sending the PR, as that will help speed up the process.
-
-You can find the same information in the [contributing guide.](https://github.com/gabrielecirulli/2048/blob/master/CONTRIBUTING.md)
 
 ## License
-2048 is licensed under the [MIT license.](https://github.com/gabrielecirulli/2048/blob/master/LICENSE.txt)
+2048 is licensed under the [MIT license.](https://github.com/gabrielecirulli/2048/blob/master/LICENSE.txt), as is this fork
 
-## Donations
-I made this in my spare time, and it's hosted on GitHub (which means I don't have any hosting costs), but if you enjoyed the game and feel like buying me coffee, you can donate at my BTC address: `1Ec6onfsQmoP9kkL3zkpB6c5sA4PVcXU2i`. Thank you very much!

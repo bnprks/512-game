@@ -1,0 +1,19 @@
+[package]
+name = "puzzle-128"
+version = "0.1.0"
+edition = "2021"
+
+
+[lib]
+name = "puzzle128"
+crate-type = ["cdylib", "lib"]
+
+[[bin]]
+name = "puzzle128"
+path = "src/main.rs"
+
+[dependencies]
+bincode = "1.3.3"
+boomphf = { version = "0.6.0", features = ["serde"], default-features = false }
+serde = { version = "1.0.217", features = ["derive"] }
+wasm-bindgen = "0.2.100"

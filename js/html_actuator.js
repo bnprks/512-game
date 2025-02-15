@@ -1,11 +1,22 @@
+
+async function loadStrategy() {
+  await wasm_bindgen();
+  const response = await fetch("strategy.bin");
+  const arrayBuffer = await response.arrayBuffer();
+  return new wasm_bindgen.WasmStrategy(new Uint8Array(arrayBuffer));
+}
+
 function HTMLActuator() {
   this.tileContainer    = document.querySelector(".tile-container");
   this.scoreContainer   = document.querySelector(".score-container");
   this.bestContainer    = document.querySelector(".best-container");
   this.messageContainer = document.querySelector(".game-message");
+  this.strategyContainer= document.querySelector(".game-strategy");
 
+  this.strategy = loadStrategy();
   this.score = 0;
 }
+
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
   var self = this;
@@ -32,8 +43,28 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
       }
     }
 
+    self.updateStrategy(grid);
   });
 };
+
+// Update the strategy listing
+HTMLActuator.prototype.updateStrategy = function(grid) {
+  var board = [];
+  for (var i = 0; i < 3; i++) {
+    for (var j = 0; j < 3; j++) {
+      var tile = grid.cells[j][i];
+      if (tile === null) {
+        tile = 0;
+      } else {
+        tile = Math.log2(tile.value);
+      }
+      board.push(tile);
+    }
+  }
+  this.strategy.then(strategy => {
+    this.strategyContainer.innerHTML = strategy.message(board);
+  });
+}
 
 // Continues the game (both restart and keep playing)
 HTMLActuator.prototype.continueGame = function () {
@@ -56,8 +87,6 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   // We can't use classlist because it somehow glitches when replacing classes
   var classes = ["tile", "tile-" + tile.value, positionClass];
-
-  if (tile.value > 2048) classes.push("tile-super");
 
   this.applyClasses(wrapper, classes);
 
