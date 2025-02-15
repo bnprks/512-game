@@ -25,7 +25,8 @@ cargo run --release strategy.bin
 
 To build the webassembly package:
 ```shell
-wasm-pack build --target no-modules --out-dir js/strategy
+wasm-pack build --target no-modules --out-dir js/strategy --release --no-pack --no-typescript
+rm js/strategy/.gitignore
 ```
 
 

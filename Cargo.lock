@@ -56,7 +56,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "puzzle-128"
+name = "puzzle-512"
 version = "0.1.0"
 dependencies = [
  "bincode",

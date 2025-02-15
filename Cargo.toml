@@ -1,15 +1,15 @@
 [package]
-name = "puzzle-128"
+name = "puzzle-512"
 version = "0.1.0"
 edition = "2021"
 
 
 [lib]
-name = "puzzle128"
+name = "puzzle512"
 crate-type = ["cdylib", "lib"]
 
 [[bin]]
-name = "puzzle128"
+name = "puzzle512"
 path = "src/main.rs"
 
 [dependencies]

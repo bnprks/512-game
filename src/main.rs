@@ -1,7 +1,7 @@
 use std::env;
 use std::fs::File;
 
-use puzzle128::{optimal_strategy, save_strategy};
+use puzzle512::{optimal_strategy, save_strategy};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
