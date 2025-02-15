@@ -1,4 +1,6 @@
 # 512
+[Play here!](bnprks.github.io/512-game/)
+
 A clone of [128](https://ashervollmer.github.io/2048/128.html) by Asher Vollmer, which is itself a variant of the famous 2048 game.
 
 This has a few notable improvements over 2048:
